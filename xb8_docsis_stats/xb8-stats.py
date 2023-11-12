@@ -4,16 +4,28 @@ __author__ = "Aaron Turner <synfinatic at gmail dot com"
 
 import argparse
 from bs4 import BeautifulSoup
+from enum import Enum
 import logging
 import graphyte
 import requests
+import time
 from typing import Dict
 
 from lib.args import EnvDefault
 from lib.channel import Tables
 
 log = logging.getLogger("root")
-log.setLevel(logging.DEBUG)
+log.setLevel(logging.WARNING)
+
+
+class LogLevel(Enum):
+    error = 'error'
+    info = 'info'
+    warn = 'warning'
+    debug = 'debug'
+
+    def __str__(self):
+        return self.value
 
 
 def login(args) -> Dict[str, str]:
@@ -68,18 +80,26 @@ def fetch_stats(args) -> Tables:
 
 def submit_metrics(args, tables: Tables):
     host, port = args.graphite.split(':')
-    sender = graphyte.Sender(host, port=port, prefix=args.prefix,
-                             tags={'host': args.modem},
-                             raise_send_errors=True)
-    kind = ['Downstream', 'Upstream']
+    sender = graphyte.Sender(host, port=port, raise_send_errors=True)
     i = 0
-    for k in kind:
+    for k in ['Downstream', 'Upstream']:
         for table in getattr(tables, k):
             for metric in table.metrics:
+                name = '.'.join([args.prefix, metric.Name])
                 i += 1
-                sender.send(metric.Name, metric.Value, tags=metric.Tags)
+                sender.send(name, metric.Value)
     sender.stop()
-    print(f'sent {i} metrics')
+    log.info('sent %d metrics', i)
+
+
+def loop(args):
+    tables = fetch_stats(args)
+    tables.map_channels()
+    if args.dump_json:
+        print(tables.to_json())
+    else:
+        submit_metrics(args, tables)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -87,26 +107,40 @@ def main():
         description=__description__,
     )
 
-    parser.add_argument('--modem', type=str, default='10.0.0.1',
-                        help='IP or hostname of the modem')
-    parser.add_argument('--username', '-u', type=str, default='admin',
-                        help='Username to use to login to the modem')
-    parser.add_argument('--password', '-p', action=EnvDefault,
-                        envvar='XB8_PASSWORD', required=True,
-                        help='Password to use to login to the modem')
-    parser.add_argument('--graphite', type=str, default='127.0.0.1:2003',
-                        help='host:port of the graphite submission server')
-    parser.add_argument('--prefix', type=str, default='modem',
-                        help='Graphite metric prefix for metrics')
+    parser.add_argument(
+        '--modem', type=str, default='10.0.0.1',
+        help='IP or hostname of the modem (%(default)s)')
+    parser.add_argument(
+        '--username', '-u', type=str, default='admin',
+        help='Username to use to login to the modem (%(default)s)')
+    parser.add_argument(
+        '--password', '-p', action=EnvDefault,
+        envvar='XB8_PASSWORD', required=True,
+        help='Password to use to login to the modem')
+    parser.add_argument(
+        '--graphite', type=str, required=True,
+        help='host:port of the graphite submission server')
+    parser.add_argument(
+        '--prefix', type=str, default='modem',
+        help='Graphite metric prefix for metrics (%(default)s)')
+    parser.add_argument(
+        '--interval', type=int, default=0,
+        help='Number of seconds between each poll cycle')
+    parser.add_argument(
+        '--dump-json', action='store_true',
+        help='Dumps the stats as JSON instead')
+    parser.add_argument(
+        '--log-level', type=LogLevel, choices=list(LogLevel),
+        default='info', help='Log level (%(default)s)')
 
     args = parser.parse_args()
+    log.setLevel(args.log_level)
 
-    tables = fetch_stats(args)
-    tables.map_channels()
-#    print(tables.to_json())
-#    print(f'upstream = {tables.Upstream[0].metrics}')
-#    print(f'downstream = {tables.Downstream[0].metrics}')
-    submit_metrics(args, tables)
+    loop(args)
+    if args.interval:
+        while True:
+            time.sleep(args.interval)
+            loop(args)
 
 
 if __name__ == "__main__":

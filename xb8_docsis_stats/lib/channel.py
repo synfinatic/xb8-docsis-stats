@@ -13,6 +13,7 @@ log = logging.getLogger("root")
 
 @dataclass
 class Metric:
+    """Carbon metric"""
     Name: str = field(default_factory=lambda: "")
     Value: Union[int, float] = field(default_factory=lambda: 0)
     Tags: Dict[str, str] = field(default_factory=lambda: dict())
@@ -21,6 +22,7 @@ class Metric:
 @dataclass_json
 @dataclass
 class Channel:
+    """Common channel fields"""
     ChannelId: int = 0
     Frequency: str = ""  # Mhz
     LockStatus: str = "Unknown"  # Locked, ???

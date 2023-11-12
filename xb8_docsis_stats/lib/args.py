@@ -1,6 +1,8 @@
 import argparse
 import os
 
+
+# https://stackoverflow.com/a/10551190
 class EnvDefault(argparse.Action):
     def __init__(self, envvar, required=True, default=None, **kwargs):
         if not default and envvar:
