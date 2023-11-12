@@ -3,16 +3,14 @@ __description__ = "Comcast XB7/XB8 DOCSIS stats scraper"
 __author__ = "Aaron Turner <synfinatic at gmail dot com"
 
 import argparse
-import requests
-import logging
 from bs4 import BeautifulSoup
-from typing import Union
+import logging
+import graphyte
+import requests
 from typing import Dict
-from typing import List
-
 
 from lib.args import EnvDefault
-from lib.channel import Downstream, Upstream, Error, Tables
+from lib.channel import Tables
 
 log = logging.getLogger("root")
 log.setLevel(logging.DEBUG)
@@ -20,7 +18,7 @@ log.setLevel(logging.DEBUG)
 
 def login(args) -> Dict[str, str]:
     page = requests.post(f'http://{args.modem}/check.jst',
-        data = {
+        data={
             'username': args.username,
             'password': args.password,
         })
@@ -48,10 +46,6 @@ def fetch_stats(args) -> Tables:
         if table is None:
             continue
 
-        # process the table header
-        thead = table.find("thead")
-        td = thead.find("td")
-
         mtype = Tables.fields[midx]
         midx += 1
 
@@ -65,10 +59,27 @@ def fetch_stats(args) -> Tables:
                 try:
                     tables.add(mtype, cidx, ridx, val)
                 except ValueError as e:
-                    log.error(f'mtype = {mtype}, cidx = {cidx}, ridx = {ridx}, val = {val}')
+                    log.error(
+                        f'mtype = {mtype}, cidx = {cidx}, '
+                        f'ridx = {ridx}, val = {val}')
                     raise e
     return tables
 
+
+def submit_metrics(args, tables: Tables):
+    host, port = args.graphite.split(':')
+    sender = graphyte.Sender(host, port=port, prefix=args.prefix,
+                             tags={'host': args.modem},
+                             raise_send_errors=True)
+    kind = ['Downstream', 'Upstream']
+    i = 0
+    for k in kind:
+        for table in getattr(tables, k):
+            for metric in table.metrics:
+                i += 1
+                sender.send(metric.Name, metric.Value, tags=metric.Tags)
+    sender.stop()
+    print(f'sent {i} metrics')
 
 def main():
     parser = argparse.ArgumentParser(
@@ -83,11 +94,19 @@ def main():
     parser.add_argument('--password', '-p', action=EnvDefault,
                         envvar='XB8_PASSWORD', required=True,
                         help='Password to use to login to the modem')
+    parser.add_argument('--graphite', type=str, default='127.0.0.1:2003',
+                        help='host:port of the graphite submission server')
+    parser.add_argument('--prefix', type=str, default='modem',
+                        help='Graphite metric prefix for metrics')
 
     args = parser.parse_args()
 
     tables = fetch_stats(args)
-    print(tables.to_json())
+    tables.map_channels()
+#    print(tables.to_json())
+#    print(f'upstream = {tables.Upstream[0].metrics}')
+#    print(f'downstream = {tables.Downstream[0].metrics}')
+    submit_metrics(args, tables)
 
 
 if __name__ == "__main__":
