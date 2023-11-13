@@ -29,3 +29,10 @@ Create a `.env` file with the following:
 GRAPHITE=<host>:<port>
 PASSWORD=<modem password>
 ```
+
+## Support
+
+So I've only tested this code against an XB8 modem.  I'm fairly certain
+that it will work with the XB7 because I believe the webUI is the same.
+If you find it doesn't work, by all means open a ticket and include
+the HTML for the `Gateway > Connection > XFINITY Network` page.
