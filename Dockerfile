@@ -1,7 +1,7 @@
 from python:3.12
 
 RUN pip install poetry==1.7.0 && \
-    mkdir /xb8-docsis-stats
+    mkdir /code
 
 ENV \
   PYTHONFAULTHANDLER=1 \
@@ -12,12 +12,12 @@ ENV \
   PIP_DEFAULT_TIMEOUT=100 \
   POETRY_VERSION=1.0.0
 
-WORKDIR /xb8-docsis-stats
+WORKDIR /code
 COPY poetry.lock .
 COPY pyproject.toml .
 RUN poetry install
 
-COPY xb8_docsis_stats .
+COPY ./xb8_docsis_stats .
 
 ENV MODEM=10.0.0.1
 ENV USERNAME=admin
@@ -25,13 +25,13 @@ ENV PASSWORD=INVALID_PASSWORD_CHANGE_ME
 ENV GRAPHITE=127.0.0.1:2003
 ENV PREFIX=modem
 ENV INTERVAL=300
+ENV LEVEL=info
 
-CMD poetry run ./xb8_docsis_stats/xb8-stats.py \
+CMD poetry run ./xb8-stats.py \
     --modem $MODEM \
     --username $USERNAME \
     --password $PASSWORD \
     --graphite $GRAPHITE \
     --prefix $PREFIX \
-    --interval $INTERVAL
-
-
+    --interval $INTERVAL \
+    --log-level $LEVEL

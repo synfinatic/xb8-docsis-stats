@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  xb8-stats:
+    container_name: xb8-docsis-stats
+    image: synfinatic/xb8-docsis-stats:latest
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - PASSWORD=${PASSWORD}
+      - GRAPHITE=${GRAPHITE}
+    restart: unless-stopped

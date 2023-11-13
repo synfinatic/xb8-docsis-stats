@@ -14,18 +14,28 @@ from typing import Dict
 from lib.args import EnvDefault
 from lib.channel import Tables
 
-log = logging.getLogger("root")
-log.setLevel(logging.WARNING)
+log = None
 
 
 class LogLevel(Enum):
     error = 'error'
     info = 'info'
-    warn = 'warning'
+    warn = 'warn'
     debug = 'debug'
 
     def __str__(self):
         return self.value
+
+    @property
+    def level(self) -> int:
+        levels = {
+            'debug': logging.DEBUG,
+            'warn': logging.WARNING,
+            'info': logging.INFO,
+            'error': logging.ERROR,
+            'critical': logging.CRITICAL,
+        }
+        return levels[self.value]
 
 
 def login(args) -> Dict[str, str]:
@@ -35,6 +45,9 @@ def login(args) -> Dict[str, str]:
             'password': args.password,
         })
     page.raise_for_status()
+    if 'Access denied!' in str(page.content):
+        raise ValueError('Invalid username/password')
+
     return page.cookies
 
 
@@ -102,6 +115,10 @@ def loop(args):
 
 
 def main():
+    global log
+    logging.basicConfig(format='%(levelname)s %(asctime)s: %(message)s')
+    log = logging.getLogger("root")
+
     parser = argparse.ArgumentParser(
         prog='xb8-stats',
         description=__description__,
@@ -134,7 +151,7 @@ def main():
         default='info', help='Log level (%(default)s)')
 
     args = parser.parse_args()
-    log.setLevel(args.log_level)
+    log.setLevel(args.log_level.level)
 
     loop(args)
     if args.interval:
