@@ -106,7 +106,11 @@ def submit_metrics(args, tables: Tables):
 
 
 def loop(args):
-    tables = fetch_stats(args)
+    tables = None
+    try:
+        tables = fetch_stats(args)
+    except requests.exceptions.ConnectTimeout as e:
+        log.error("Unable to poll modem: %s", e)
     tables.map_channels()
     if args.dump_json:
         print(tables.to_json())

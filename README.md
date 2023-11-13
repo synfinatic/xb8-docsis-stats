@@ -1,8 +1,9 @@
-# XB7/XB8 DOCSIS Stats WebScraper
+# Comcast XB7/XB8 DOCSIS Stats WebScraper
 
 This is a webscraper for collecting the DOCSIS modem stats for the
-Comcast XB7/XB8 modem for tracking in [Graphite Carbon](
-https://github.com/graphite-project/carbon).
+[Comcast XB7/XB8 modem](
+https://www.xfinity.com/support/articles/broadband-gateways-userguides)
+for tracking in [Graphite Carbon](https://github.com/graphite-project/carbon).
 
 ## Overview
 
