@@ -30,3 +30,15 @@ Create a `.env` file with the following:
 GRAPHITE=<host>:<port>
 PASSWORD=<modem password>
 ```
+
+### Graphite Config
+
+Assuming you're using a 5min poll cycle (`--interval 300` which is the default
+for the docker image) I recommend the following in your [storage-schemas.conf](
+https://graphite.readthedocs.io/en/latest/config-carbon.html#storage-schemas-conf):
+
+```ini
+[modem]
+pattern = ^modem\.
+retentions = 5m:90d,30m:335d,1h:3y
+```
