@@ -1,4 +1,4 @@
-# Comcast XB7/XB8 DOCSIS Stats WebScraper
+# Comcast XB7/XB8 DOCSIS Stats for Graphite
 
 This is a webscraper for collecting the DOCSIS modem stats for the
 [Comcast XB7/XB8 modem](
@@ -18,7 +18,22 @@ This project logs into the webUI of the XB7/XB8 modem and scrapes the
 HTML table information for the `Downstream` and `Upstream` channels.
 It then submits this data to your Graphite server.
 
-## Running
+## Installation
+
+### Graphite Config
+
+Assuming you're using a 5min poll cycle (`--interval 300` which is the default
+for the docker image) I recommend adding the following to the top of your
+[storage-schemas.conf](
+https://graphite.readthedocs.io/en/latest/config-carbon.html#storage-schemas-conf):
+
+```ini
+[modem]
+pattern = ^modem\.
+retentions = 5m:90d,30m:335d,1h:3y
+```
+
+### Running
 
 I recommend to use the provided [docker-compose](docker-compose.yaml)
 to run xb8-stats and submit to [Graphite Statsd](
@@ -31,14 +46,7 @@ GRAPHITE=<host>:<port>
 PASSWORD=<modem password>
 ```
 
-### Graphite Config
+### Grafana Dashboard
 
-Assuming you're using a 5min poll cycle (`--interval 300` which is the default
-for the docker image) I recommend the following in your [storage-schemas.conf](
-https://graphite.readthedocs.io/en/latest/config-carbon.html#storage-schemas-conf):
-
-```ini
-[modem]
-pattern = ^modem\.
-retentions = 5m:90d,30m:335d,1h:3y
-```
+I've created a [dashboard](grafana.json) for [Grafana](https://grafana.com) which should be a
+good starting point for others.

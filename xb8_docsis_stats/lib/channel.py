@@ -139,7 +139,7 @@ class Upstream(Channel):
         "ChannelId", "LockStatus", "Frequency", "SymbolRate", "PowerLevel",
         "Modulation", "ChannelType"]
     _metrics: ClassVar[List[str]] = [
-        'PowerLevel', 'Locked',
+        'PowerLevel', 'Locked', 'SymbolRate'
     ]
 
     SymbolRate: int = 0  # only upstream
