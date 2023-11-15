@@ -118,12 +118,6 @@ class Downstream(Channel):
                 setattr(self, Downstream._fields[row_idx], int(val))
             case 'LockStatus' | 'Modulation' | 'Frequency':
                 setattr(self, Downstream._fields[row_idx], val)
-            case 'xFrequency':
-                if val.find(" ") != -1:
-                    x, _ = val.split(" ", 1)
-                    setattr(self, Downstream._fields[row_idx], int(x))
-                else:  # not everything is Mhz??
-                    setattr(self, Downstream._fields[row_idx], int(val))
             case 'SNR' | 'PowerLevel':
                 x, _ = val.split(" ", 1)
                 setattr(self, Downstream._fields[row_idx], float(x))

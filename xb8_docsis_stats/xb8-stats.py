@@ -4,7 +4,6 @@ __author__ = "Aaron Turner <synfinatic at gmail dot com"
 
 import argparse
 from bs4 import BeautifulSoup
-from enum import Enum
 import logging
 import graphyte
 import requests
@@ -13,29 +12,10 @@ from typing import Dict
 
 from lib.args import EnvDefault
 from lib.channel import Tables
+from lib.logging import LogLevel
+from lib.init_proc import InitializationProcedure
 
 log = None
-
-
-class LogLevel(Enum):
-    error = 'error'
-    info = 'info'
-    warn = 'warn'
-    debug = 'debug'
-
-    def __str__(self):
-        return self.value
-
-    @property
-    def level(self) -> int:
-        levels = {
-            'debug': logging.DEBUG,
-            'warn': logging.WARNING,
-            'info': logging.INFO,
-            'error': logging.ERROR,
-            'critical': logging.CRITICAL,
-        }
-        return levels[self.value]
 
 
 def login(args) -> Dict[str, str]:
@@ -51,20 +31,41 @@ def login(args) -> Dict[str, str]:
     return page.cookies
 
 
-def fetch_stats(args) -> Tables:
+def fetch_page(args) -> str:
     cookie_jar = login(args)
 
     page = requests.get(f'http://{args.modem}/network_setup.jst',
                         cookies=cookie_jar)
     page.raise_for_status()
-    soup = BeautifulSoup(page.content, "html.parser")
+    return page.content
+
+
+def fetch_init_proc(page: str) -> InitializationProcedure:
+    soup = BeautifulSoup(page, "html.parser")
+
+    content = soup.find(id='content')
+    modules = content.find_all("div", class_="module")
+
+    init_proc: InitializationProcedure = None
+
+    for i, m in enumerate(modules):
+        # first look for the Initialization Procedure section
+        h2 = m.find("h2")
+        if h2 is not None and h2.string == 'Initialization Procedure':
+            init_proc = InitializationProcedure(m)
+            break
+    return init_proc
+
+
+def fetch_stats(page: str) -> Tables:
+    soup = BeautifulSoup(page, "html.parser")
 
     content = soup.find(id='content')
     modules = content.find_all("div", class_="module")
 
     tables = Tables()
-
     midx = 0
+
     for i, m in enumerate(modules):
         # seems to be more <div class="module"> than I expect??
         table = m.find("table", class_="data")
@@ -91,16 +92,22 @@ def fetch_stats(args) -> Tables:
     return tables
 
 
-def submit_metrics(args, tables: Tables):
+def submit_metrics(args, tables: Tables, init_proc: InitializationProcedure):
     host, port = args.graphite.split(':')
     sender = graphyte.Sender(host, port=port, raise_send_errors=True)
     i = 0
+    for metric, value in init_proc.metrics.items():
+        name = '.'.join([args.prefix, 'InitProcedure', metric])
+        sender.send(name, value.value)
+        i += 1
+
     for k in ['Downstream', 'Upstream']:
         for table in getattr(tables, k):
             for metric in table.metrics:
                 name = '.'.join([args.prefix, metric.Name])
-                i += 1
                 sender.send(name, metric.Value)
+                i += 1
+
     sender.stop()
     log.info('sent %d metrics', i)
 
@@ -108,14 +115,17 @@ def submit_metrics(args, tables: Tables):
 def loop(args):
     tables = None
     try:
-        tables = fetch_stats(args)
+        page = fetch_page(args)
+        tables = fetch_stats(page)
+        init_proc = fetch_init_proc(page)
     except requests.exceptions.ConnectTimeout as e:
         log.error("Unable to poll modem: %s", e)
     tables.map_channels()
     if args.dump_json:
         print(tables.to_json())
+        print(init_proc.to_json())
     else:
-        submit_metrics(args, tables)
+        submit_metrics(args, tables, init_proc)
 
 
 def main():

@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "xb8-docsis-stats"
-version = "0.2.0"
+version = "0.3.0"
 description = "Comcast XB7/XB8 DOCSIS stats scraper"
 authors = ["Aaron Turner <synfinatic@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 beautifulsoup4 = "^4.12.2"
 graphyte = "^1.7.1"
 requests = "^2.31.0"

@@ -50,3 +50,12 @@ PASSWORD=<modem password>
 
 I've created a [dashboard](grafana.json) for [Grafana](https://grafana.com) which should be a
 good starting point for others.
+
+#### Initialization Procedure
+
+So I have learned that the XB7/XB8 doesn't expose any statistics for the channels
+whatsoever in certain more extreme "down" situations.  To help debug these situations
+we poll the `Initialization Procedure` data which may help debug and diagnose the
+situation.
+
+
