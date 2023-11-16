@@ -5,6 +5,8 @@
 ## Features
 
  * Add support for Initialization Procedure data
+ * When running with --interval, we cache login cookie for better performance
+ * Updated example Grafana dashboard
 
 [v0.2.0] - 2023-11-14
 

@@ -8,36 +8,14 @@ import logging
 import graphyte
 import requests
 import time
-from typing import Dict
 
 from lib.args import EnvDefault
 from lib.channel import Tables
 from lib.logging import LogLevel
 from lib.init_proc import InitializationProcedure
+from lib.http import XBRConfig, fetch_network_stats_page
 
 log = None
-
-
-def login(args) -> Dict[str, str]:
-    page = requests.post(f'http://{args.modem}/check.jst',
-        data={
-            'username': args.username,
-            'password': args.password,
-        })
-    page.raise_for_status()
-    if 'Access denied!' in str(page.content):
-        raise ValueError('Invalid username/password')
-
-    return page.cookies
-
-
-def fetch_page(args) -> str:
-    cookie_jar = login(args)
-
-    page = requests.get(f'http://{args.modem}/network_setup.jst',
-                        cookies=cookie_jar)
-    page.raise_for_status()
-    return page.content
 
 
 def fetch_init_proc(page: str) -> InitializationProcedure:
@@ -59,7 +37,6 @@ def fetch_init_proc(page: str) -> InitializationProcedure:
 
 def fetch_stats(page: str) -> Tables:
     soup = BeautifulSoup(page, "html.parser")
-
     content = soup.find(id='content')
     modules = content.find_all("div", class_="module")
 
@@ -112,14 +89,15 @@ def submit_metrics(args, tables: Tables, init_proc: InitializationProcedure):
     log.info('sent %d metrics', i)
 
 
-def loop(args):
+def loop(config: XBRConfig, args):
     tables = None
     try:
-        page = fetch_page(args)
+        page = fetch_network_stats_page(config)
         tables = fetch_stats(page)
         init_proc = fetch_init_proc(page)
-    except requests.exceptions.ConnectTimeout as e:
+    except requests.exceptions.RequestException as e:
         log.error("Unable to poll modem: %s", e)
+    # let ValueError() to up the stack as it is fatal
     tables.map_channels()
     if args.dump_json:
         print(tables.to_json())
@@ -138,6 +116,7 @@ def main():
         description=__description__,
     )
 
+    action_group = parser.add_mutually_exclusive_group(required=True)
     parser.add_argument(
         '--modem', type=str, default='10.0.0.1',
         help='IP or hostname of the modem (%(default)s)')
@@ -148,8 +127,11 @@ def main():
         '--password', '-p', action=EnvDefault,
         envvar='XB8_PASSWORD', required=True,
         help='Password to use to login to the modem')
-    parser.add_argument(
-        '--graphite', type=str, required=True,
+    action_group.add_argument(
+        '--dump-json', action='store_true',
+        help='Dumps the stats as JSON instead')
+    action_group.add_argument(
+        '--graphite', type=str,
         help='host:port of the graphite submission server')
     parser.add_argument(
         '--prefix', type=str, default='modem',
@@ -158,20 +140,23 @@ def main():
         '--interval', type=int, default=0,
         help='Number of seconds between each poll cycle')
     parser.add_argument(
-        '--dump-json', action='store_true',
-        help='Dumps the stats as JSON instead')
-    parser.add_argument(
         '--log-level', type=LogLevel, choices=list(LogLevel),
         default='info', help='Log level (%(default)s)')
 
     args = parser.parse_args()
     log.setLevel(args.log_level.level)
 
-    loop(args)
+    config = XBRConfig(
+        Hostname=args.modem,
+        Username=args.username,
+        Password=args.password,
+    )
+
+    loop(config, args)
     if args.interval:
         while True:
             time.sleep(args.interval)
-            loop(args)
+            loop(config, args)
 
 
 if __name__ == "__main__":
