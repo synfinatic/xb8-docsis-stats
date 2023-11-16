@@ -8,6 +8,8 @@ import logging
 import graphyte
 import requests
 import time
+from timeit import default_timer as timer
+
 
 from lib.args import EnvDefault
 from lib.channel import Tables
@@ -152,11 +154,16 @@ def main():
         Password=args.password,
     )
 
+    start = timer()
     loop(config, args)
+    end = timer()
     if args.interval:
         while True:
-            time.sleep(args.interval)
+            # adjust our sleep time to compensate for how slow the modem is
+            time.sleep(args.interval - (end - start))
+            start = timer()
             loop(config, args)
+            end = timer()
 
 
 if __name__ == "__main__":
