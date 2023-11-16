@@ -59,6 +59,8 @@ GRAPHITE=<host>:<port>
 PASSWORD=<modem password>
 ```
 
+Docker images are available via [Docker Hub](
+https://hub.docker.com/repository/docker/synfinatic/xb8-docsis-stats/general)
 
 ### Grafana Dashboard
 
