@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 import logging
@@ -118,12 +119,6 @@ class Downstream(Channel):
                 setattr(self, Downstream._fields[row_idx], int(val))
             case 'LockStatus' | 'Modulation' | 'Frequency':
                 setattr(self, Downstream._fields[row_idx], val)
-            case 'xFrequency':
-                if val.find(" ") != -1:
-                    x, _ = val.split(" ", 1)
-                    setattr(self, Downstream._fields[row_idx], int(x))
-                else:  # not everything is Mhz??
-                    setattr(self, Downstream._fields[row_idx], int(val))
             case 'SNR' | 'PowerLevel':
                 x, _ = val.split(" ", 1)
                 setattr(self, Downstream._fields[row_idx], float(x))
@@ -169,6 +164,38 @@ class Tables:
     Downstream: List[Downstream] = field(default_factory=lambda: [])
     Upstream: List[Upstream] = field(default_factory=lambda: [])
     Error: List[Error] = field(default_factory=lambda: [])
+
+    def load(self, page: str):
+        soup = BeautifulSoup(page, "html.parser")
+        content = soup.find(id='content')
+        modules = content.find_all("div", class_="module")
+
+        midx = 0
+
+        for i, m in enumerate(modules):
+            # seems to be more <div class="module"> than I expect??
+            table = m.find("table", class_="data")
+            if table is None:
+                continue
+
+            mtype = self.fields[midx]
+            midx += 1
+
+            # process table body
+            body = table.find("tbody")
+            for ridx, row in enumerate(body.find_all("tr")):
+                for cidx, column in enumerate(row.find_all("td")):
+                    val = column.text.strip()
+                    if ridx == 0:
+                        self.new(mtype)
+                    try:
+                        self.add(mtype, cidx, ridx, val)
+                    except ValueError as e:
+                        log.error(
+                            f'mtype = {mtype}, cidx = {cidx}, '
+                            f'ridx = {ridx}, val = {val}')
+                        raise e
+        self.map_channels()
 
     def new(self, kind: str):
         """Create a new channel"""

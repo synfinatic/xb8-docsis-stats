@@ -85,7 +85,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 0,
         "y": 0
@@ -93,8 +93,13 @@
       "id": 2,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -122,8 +127,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "alias(averageSeries(#A), 'average PowerLevel')",
-          "targetFull": "alias(averageSeries(aliasByNode(modem.Upstream.*.PowerLevel, 2)), 'average PowerLevel')",
+          "target": "alias(averageSeries(#A), 'Average PowerLevel')",
+          "targetFull": "alias(averageSeries(aliasByNode(modem.Upstream.*.PowerLevel, 2)), 'Average PowerLevel')",
           "textEditor": true
         },
         {
@@ -134,8 +139,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "C",
-          "target": "alias(maxSeries(#A), 'maximum PowerLevel')",
-          "targetFull": "alias(maxSeries(aliasByNode(modem.Upstream.*.PowerLevel, 2)), 'maximum PowerLevel')",
+          "target": "alias(maxSeries(#A), 'Maximum PowerLevel')",
+          "targetFull": "alias(maxSeries(aliasByNode(modem.Upstream.*.PowerLevel, 2)), 'Maximum PowerLevel')",
           "textEditor": true
         },
         {
@@ -146,8 +151,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "D",
-          "target": "alias(minSeries(#A), 'minimum PowerLevel')",
-          "targetFull": "alias(minSeries(aliasByNode(modem.Upstream.*.PowerLevel, 2)), 'minimum PowerLevel')",
+          "target": "alias(minSeries(#A), 'Minimum PowerLevel')",
+          "targetFull": "alias(minSeries(aliasByNode(modem.Upstream.*.PowerLevel, 2)), 'Minimum PowerLevel')",
           "textEditor": true
         }
       ],
@@ -215,7 +220,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 12,
         "y": 0
@@ -223,8 +228,13 @@
       "id": 3,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -252,8 +262,9 @@
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "alias(averageSeries(#A), 'average PowerLevel')",
-          "targetFull": "alias(averageSeries(aliasByNode(modem.Downstream.*.PowerLevel, 2)), 'average PowerLevel')"
+          "target": "alias(averageSeries(#A), 'Average PowerLevel')",
+          "targetFull": "alias(averageSeries(aliasByNode(modem.Downstream.*.PowerLevel, 2)), 'Average PowerLevel')",
+          "textEditor": true
         },
         {
           "datasource": {
@@ -263,8 +274,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "C",
-          "target": "alias(maxSeries(#A), 'maximum PowerLevel')",
-          "targetFull": "alias(maxSeries(aliasByNode(modem.Downstream.*.PowerLevel, 2)), 'maximum PowerLevel')",
+          "target": "alias(maxSeries(#A), 'Maximum PowerLevel')",
+          "targetFull": "alias(maxSeries(aliasByNode(modem.Downstream.*.PowerLevel, 2)), 'Maximum PowerLevel')",
           "textEditor": true
         },
         {
@@ -275,8 +286,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "D",
-          "target": "alias(minSeries(#A), 'minimum PowerLevel')",
-          "targetFull": "alias(minSeries(aliasByNode(modem.Downstream.*.PowerLevel, 2)), 'minimum PowerLevel')",
+          "target": "alias(minSeries(#A), 'Minimum PowerLevel')",
+          "targetFull": "alias(minSeries(aliasByNode(modem.Downstream.*.PowerLevel, 2)), 'Minimum PowerLevel')",
           "textEditor": true
         }
       ],
@@ -344,16 +355,20 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 10
       },
       "id": 9,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -371,7 +386,7 @@
           "refCount": 0,
           "refId": "A",
           "target": "alias(sum(modem.Upstream.*.Locked), 'Upstream')",
-          "textEditor": true
+          "textEditor": false
         },
         {
           "datasource": {
@@ -382,7 +397,7 @@
           "refCount": 0,
           "refId": "B",
           "target": "alias(sum(modem.Downstream.*.Locked), 'Downstream')",
-          "textEditor": true
+          "textEditor": false
         }
       ],
       "title": "Locked Channel Totals",
@@ -450,16 +465,21 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 10
       },
       "id": 1,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -487,9 +507,9 @@
           "hide": false,
           "refCount": 0,
           "refId": "B",
-          "target": "alias(averageSeries(#A), 'average SNR')",
-          "targetFull": "alias(averageSeries(aliasByNode(modem.Downstream.*.SNR, 2)), 'average SNR')",
-          "textEditor": false
+          "target": "alias(averageSeries(#A), 'Average SNR')",
+          "targetFull": "alias(averageSeries(aliasByNode(modem.Downstream.*.SNR, 2)), 'Average SNR')",
+          "textEditor": true
         },
         {
           "datasource": {
@@ -499,8 +519,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "C",
-          "target": "alias(maxSeries(#A), 'maximum SNR')",
-          "targetFull": "alias(maxSeries(aliasByNode(modem.Downstream.*.SNR, 2)), 'maximum SNR')",
+          "target": "alias(maxSeries(#A), 'Maximum SNR')",
+          "targetFull": "alias(maxSeries(aliasByNode(modem.Downstream.*.SNR, 2)), 'Maximum SNR')",
           "textEditor": true
         },
         {
@@ -511,8 +531,8 @@
           "hide": false,
           "refCount": 0,
           "refId": "D",
-          "target": "alias(minSeries(#A), 'minimum SNR')",
-          "targetFull": "alias(minSeries(aliasByNode(modem.Downstream.*.SNR, 2)), 'minimum SNR')",
+          "target": "alias(minSeries(#A), 'Minimum SNR')",
+          "targetFull": "alias(minSeries(aliasByNode(modem.Downstream.*.SNR, 2)), 'Minimum SNR')",
           "textEditor": true
         }
       ],
@@ -574,8 +594,7 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "pps"
+          }
         },
         "overrides": []
       },
@@ -583,13 +602,18 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 20
       },
-      "id": 6,
+      "id": 13,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
@@ -607,8 +631,28 @@
           "hide": true,
           "refCount": 0,
           "refId": "A",
-          "target": "aliasByNode(nonNegativeDerivative(modem.Downstream.*.Correctable), 2)",
-          "textEditor": true
+          "target": "modem.Downstream.*.Unerrored"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "B",
+          "target": "modem.Downstream.*.Correctable"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(aggregateSeriesLists(#A, #B, 'sum'), 2)",
+          "targetFull": "aliasByNode(aggregateSeriesLists(modem.Downstream.*.Unerrored, modem.Downstream.*.Correctable, 'sum'), 2)"
         },
         {
           "datasource": {
@@ -617,12 +661,13 @@
           },
           "hide": false,
           "refCount": 0,
-          "refId": "B",
-          "target": "aliasByNode(filterSeries(nonNegativeDerivative(modem.Downstream.*.Correctable), 'max', '>', 10), 2)",
+          "refId": "D",
+          "target": "aliasByNode(filterSeries(scale(divideSeriesLists(#B, #C), 100), 'max', '>', 0.05), 2)",
+          "targetFull": "aliasByNode(filterSeries(scale(divideSeriesLists(modem.Downstream.*.Correctable, aliasByNode(aggregateSeriesLists(modem.Downstream.*.Unerrored, modem.Downstream.*.Correctable, 'sum'), 2)), 100), 'max', '>', 0.05), 2)",
           "textEditor": true
         }
       ],
-      "title": "Downstream Correctable Highlights",
+      "title": "Percent Correctable > 0.05%",
       "type": "timeseries"
     },
     {
@@ -681,6 +726,247 @@
               }
             ]
           },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 20
+      },
+      "id": 14,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "A",
+          "target": "modem.Downstream.*.Unerrored"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "B",
+          "target": "modem.Downstream.*.Uncorrectable",
+          "textEditor": false
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "C",
+          "target": "aliasByNode(aggregateSeriesLists(#A, #B, 'sum'), 2)",
+          "targetFull": "aliasByNode(aggregateSeriesLists(modem.Downstream.*.Unerrored, modem.Downstream.*.Uncorrectable, 'sum'), 2)"
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "D",
+          "target": "aliasByNode(filterSeries(scale(divideSeriesLists(#B, #C), 100), 'max', '>', 0.05), 2)",
+          "targetFull": "aliasByNode(filterSeries(scale(divideSeriesLists(modem.Downstream.*.Uncorrectable, aliasByNode(aggregateSeriesLists(modem.Downstream.*.Unerrored, modem.Downstream.*.Uncorrectable, 'sum'), 2)), 100), 'max', '>', 0.05), 2)",
+          "textEditor": true
+        }
+      ],
+      "title": "Percent Uncorrectable > 0.05%",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "FNZmFrZMk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "normal"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "pps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 28
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull",
+            "min",
+            "max",
+            "mean",
+            "sum"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(nonNegativeDerivative(modem.Downstream.*.Correctable), 2)",
+          "textEditor": false
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": false,
+          "refCount": 0,
+          "refId": "B",
+          "target": "aliasByNode(filterSeries(nonNegativeDerivative(modem.Downstream.*.Correctable), 'max', '>', 100), 2)",
+          "textEditor": false
+        }
+      ],
+      "title": "Downstream Correctable Highlights (min > 100)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "FNZmFrZMk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
           "unit": "pps"
         },
         "overrides": []
@@ -689,9 +975,10 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 28
       },
-      "id": 7,
+      "id": 8,
+      "interval": "320s",
       "options": {
         "legend": {
           "calcs": [],
@@ -710,10 +997,21 @@
             "type": "graphite",
             "uid": "FNZmFrZMk"
           },
+          "hide": false,
+          "refCount": 0,
+          "refId": "A",
+          "target": "aliasByNode(nonNegativeDerivative(modem.Downstream.*.Unerrored), 2)",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
           "hide": true,
           "refCount": 0,
-          "refId": "B",
-          "target": "aliasByNode(nonNegativeDerivative(modem.Downstream.*.Uncorrectable), 2)",
+          "refId": "max",
+          "target": "alias(aggregate(nonNegativeDerivative(modem.Downstream.*.Unerrored), 'max'), 'max')",
           "textEditor": false
         },
         {
@@ -721,14 +1019,26 @@
             "type": "graphite",
             "uid": "FNZmFrZMk"
           },
-          "hide": false,
+          "hide": true,
           "refCount": 0,
-          "refId": "A",
-          "target": "aliasByNode(filterSeries(nonNegativeDerivative(modem.Downstream.*.Uncorrectable), 'max', '>', 0), 2)",
+          "refId": "B",
+          "target": "alias(aggregate(nonNegativeDerivative(modem.Downstream.*.Unerrored), 'min'), 'min')",
+          "textEditor": true
+        },
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "hide": true,
+          "refCount": 0,
+          "refId": "C",
+          "target": "filterSeries(#A, 'max', '<', '#max')",
+          "targetFull": "filterSeries(aliasByNode(nonNegativeDerivative(modem.Downstream.*.Unerrored), 2), 'max', '<', '#max')",
           "textEditor": true
         }
       ],
-      "title": "Downstream Uncorrectable Highlights",
+      "title": "Downstream Unerrored/sec",
       "type": "timeseries"
     },
     {
@@ -796,7 +1106,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 24
+        "y": 36
       },
       "id": 10,
       "options": {
@@ -894,7 +1204,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "always",
+            "showPoints": "auto",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -904,7 +1214,6 @@
               "mode": "off"
             }
           },
-          "fieldMinMax": false,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -927,10 +1236,9 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 24
+        "y": 36
       },
-      "id": 8,
-      "interval": "320s",
+      "id": 7,
       "options": {
         "legend": {
           "calcs": [],
@@ -949,21 +1257,10 @@
             "type": "graphite",
             "uid": "FNZmFrZMk"
           },
-          "hide": false,
-          "refCount": 0,
-          "refId": "A",
-          "target": "aliasByNode(nonNegativeDerivative(modem.Downstream.*.Unerrored), 2)",
-          "textEditor": true
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "FNZmFrZMk"
-          },
           "hide": true,
           "refCount": 0,
-          "refId": "max",
-          "target": "alias(aggregate(nonNegativeDerivative(modem.Downstream.*.Unerrored), 'max'), 'max')",
+          "refId": "B",
+          "target": "aliasByNode(nonNegativeDerivative(modem.Downstream.*.Uncorrectable), 2)",
           "textEditor": false
         },
         {
@@ -971,26 +1268,14 @@
             "type": "graphite",
             "uid": "FNZmFrZMk"
           },
-          "hide": true,
+          "hide": false,
           "refCount": 0,
-          "refId": "B",
-          "target": "alias(aggregate(nonNegativeDerivative(modem.Downstream.*.Unerrored), 'min'), 'min')",
-          "textEditor": true
-        },
-        {
-          "datasource": {
-            "type": "graphite",
-            "uid": "FNZmFrZMk"
-          },
-          "hide": true,
-          "refCount": 0,
-          "refId": "C",
-          "target": "filterSeries(#A, 'max', '<', '#max')",
-          "targetFull": "filterSeries(aliasByNode(nonNegativeDerivative(modem.Downstream.*.Unerrored), 2), 'max', '<', '#max')",
+          "refId": "A",
+          "target": "aliasByNode(filterSeries(nonNegativeDerivative(modem.Downstream.*.Uncorrectable), 'max', '>', 0), 2)",
           "textEditor": true
         }
       ],
-      "title": "Downstream Unerrored/sec",
+      "title": "Downstream Uncorrectable Highlights",
       "type": "timeseries"
     },
     {
@@ -1057,7 +1342,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 32
+        "y": 44
       },
       "id": 4,
       "options": {
@@ -1135,7 +1420,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "none"
+              "mode": "normal"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -1156,7 +1441,7 @@
               }
             ]
           },
-          "unit": "Bps"
+          "unit": "KBs"
         },
         "overrides": []
       },
@@ -1164,7 +1449,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 32
+        "y": 44
       },
       "id": 11,
       "interval": "320s",
@@ -1189,11 +1474,120 @@
           "hide": false,
           "refCount": 0,
           "refId": "A",
-          "target": "aliasByNode(nonNegativeDerivative(modem.Upstream.*.SymbolRate), 2)",
+          "target": "aliasByNode(scale(modem.Upstream.*.SymbolRate, 2), 2)",
           "textEditor": true
         }
       ],
-      "title": "Downstream SymbolRate",
+      "title": "Upstream SymbolRate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "graphite",
+        "uid": "FNZmFrZMk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "fieldMinMax": false,
+          "mappings": [
+            {
+              "options": {
+                "1": {
+                  "color": "dark-red",
+                  "index": 0,
+                  "text": "NotStarted"
+                },
+                "10": {
+                  "color": "dark-green",
+                  "index": 1,
+                  "text": "Complete"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 6,
+        "y": 52
+      },
+      "id": 12,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "asc"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "graphite",
+            "uid": "FNZmFrZMk"
+          },
+          "refId": "A",
+          "target": "aliasByNode(modem.InitProcedure.*, 2)"
+        }
+      ],
+      "title": "Initialization Procedure",
       "type": "timeseries"
     }
   ],
@@ -1209,7 +1603,7 @@
   },
   "time": {
     "from": "now-6h",
-    "to": "now-5m"
+    "to": "now"
   },
   "timepicker": {
     "nowDelay": "5m"
@@ -1217,6 +1611,6 @@
   "timezone": "",
   "title": "Comcast XB8 Modem Stats",
   "uid": "b4982a28-99d5-4623-b529-a6d73e6bf4cd",
-  "version": 16,
+  "version": 24,
   "weekStart": ""
 }

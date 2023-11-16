@@ -1,5 +1,13 @@
 # Changelog
 
+[v0.3.0] - 2023-11-15
+
+## Features
+
+ * Add support for Initialization Procedure data
+ * When running with --interval, we cache login cookie for better performance
+ * Updated example Grafana dashboard
+
 [v0.2.0] - 2023-11-14
 
 ## Features
@@ -17,7 +25,8 @@
 
 Initial release
 
-[Unreleased]: https://github.com/synfinatic/xb8-docsis-stats/compare/v0.2.0...main
+[Unreleased]: https://github.com/synfinatic/xb8-docsis-stats/compare/v0.3.0...main
+[v0.3.0]: https://github.com/synfinatic/xb8-docsis-stats/releases/tag/v0.3.0
 [v0.2.0]: https://github.com/synfinatic/xb8-docsis-stats/releases/tag/v0.2.0
 [v0.1.1]: https://github.com/synfinatic/xb8-docsis-stats/releases/tag/v0.1.1
 [v0.1.0]: https://github.com/synfinatic/xb8-docsis-stats/releases/tag/v0.1.0
