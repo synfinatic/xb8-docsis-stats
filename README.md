@@ -5,6 +5,9 @@ This is a webscraper for collecting the DOCSIS modem stats for the
 https://www.xfinity.com/support/articles/broadband-gateways-userguides)
 for tracking in [Graphite Carbon](https://github.com/graphite-project/carbon).
 
+Have an Arris modem?  Maybe try out [arris-exporter](
+https://github.com/guildencrantz/arris-exporter).
+
 ## Overview
 
 Comcast XB7/XB8 modems report on a variety of statistics which are useful
@@ -33,6 +36,9 @@ pattern = ^modem\.
 retentions = 5m:90d,30m:335d,1h:3y
 ```
 
+If you change the interval, modify the `retentions` line to match or your
+grafana logs are gonna be sad.
+
 ### Running
 
 I recommend to use the provided [docker-compose](docker-compose.yaml)
@@ -58,4 +64,5 @@ whatsoever in certain more extreme "down" situations.  To help debug these situa
 we poll the `Initialization Procedure` data which may help debug and diagnose the
 situation.
 
-
+That said, if you have a working connection, by the time the modem has made the
+webUI available for polling, all of these stats should be marked `Completed`.

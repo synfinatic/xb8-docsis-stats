@@ -20,57 +20,6 @@ from lib.http import XBRConfig, fetch_network_stats_page
 log = None
 
 
-def fetch_init_proc(page: str) -> InitializationProcedure:
-    soup = BeautifulSoup(page, "html.parser")
-
-    content = soup.find(id='content')
-    modules = content.find_all("div", class_="module")
-
-    init_proc: InitializationProcedure = None
-
-    for i, m in enumerate(modules):
-        # first look for the Initialization Procedure section
-        h2 = m.find("h2")
-        if h2 is not None and h2.string == 'Initialization Procedure':
-            init_proc = InitializationProcedure(m)
-            break
-    return init_proc
-
-
-def fetch_stats(page: str) -> Tables:
-    soup = BeautifulSoup(page, "html.parser")
-    content = soup.find(id='content')
-    modules = content.find_all("div", class_="module")
-
-    tables = Tables()
-    midx = 0
-
-    for i, m in enumerate(modules):
-        # seems to be more <div class="module"> than I expect??
-        table = m.find("table", class_="data")
-        if table is None:
-            continue
-
-        mtype = Tables.fields[midx]
-        midx += 1
-
-        # process table body
-        body = table.find("tbody")
-        for ridx, row in enumerate(body.find_all("tr")):
-            for cidx, column in enumerate(row.find_all("td")):
-                val = column.text.strip()
-                if ridx == 0:
-                    tables.new(mtype)
-                try:
-                    tables.add(mtype, cidx, ridx, val)
-                except ValueError as e:
-                    log.error(
-                        f'mtype = {mtype}, cidx = {cidx}, '
-                        f'ridx = {ridx}, val = {val}')
-                    raise e
-    return tables
-
-
 def submit_metrics(args, tables: Tables, init_proc: InitializationProcedure):
     host, port = args.graphite.split(':')
     sender = graphyte.Sender(host, port=port, raise_send_errors=True)
@@ -94,13 +43,14 @@ def submit_metrics(args, tables: Tables, init_proc: InitializationProcedure):
 def loop(config: XBRConfig, args):
     tables = None
     try:
+        tables = Tables()
+        init_proc = InitializationProcedure()
         page = fetch_network_stats_page(config)
-        tables = fetch_stats(page)
-        init_proc = fetch_init_proc(page)
+        tables.load(page)
+        init_proc.load(page)
     except requests.exceptions.RequestException as e:
         log.error("Unable to poll modem: %s", e)
     # let ValueError() to up the stack as it is fatal
-    tables.map_channels()
     if args.dump_json:
         print(tables.to_json())
         print(init_proc.to_json())

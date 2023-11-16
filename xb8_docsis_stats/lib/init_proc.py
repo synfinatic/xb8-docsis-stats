@@ -1,4 +1,4 @@
-from bs4 import Tag
+from bs4 import BeautifulSoup
 from dataclasses import dataclass, field
 from dataclasses_json import dataclass_json
 import enum
@@ -36,19 +36,31 @@ class InitializationProcedure:
     Registration: InitStatus = field(
         default_factory=lambda: InitStatus.NotStarted)
 
-    def __init__(self, tag: Tag):
-        divs = tag.find_all("div", class_='form-row')
-        for div in divs:
-            label = div.find('span', class_='readonlyLabel').string
-            # remove all the stuff we don't want from the label
-            label = re.sub(r'[-: ]+', '', label)
-            value = div.find('span', class_='value').string
-            try:
-                val = getattr(InitStatus, value)
-                setattr(self, label, val)
-            except ValueError:
-                log.error("Invalid InitStatus: %s = %s", label, value)
-                continue
+    def load(self, page: str):
+        soup = BeautifulSoup(page, "html.parser")
+
+        content = soup.find(id='content')
+        modules = content.find_all("div", class_="module")
+        match = False
+        for i, m in enumerate(modules):
+            # first look for the Initialization Procedure section
+            h2 = m.find("h2")
+            if h2 is not None and h2.string == 'Initialization Procedure':
+                match = True
+                divs = m.find_all("div", class_='form-row')
+                for div in divs:
+                    label = div.find('span', class_='readonlyLabel').string
+                    # remove all the stuff we don't want from the label
+                    label = re.sub(r'[-: ]+', '', label)
+                    value = div.find('span', class_='value').string
+                    try:
+                        val = getattr(InitStatus, value)
+                        setattr(self, label, val)
+                    except ValueError:
+                        log.error("Invalid InitStatus: %s = %s", label, value)
+                        continue
+        if not match:
+            raise ValueError('Missing Initialization Procedure')
 
     @property
     def metrics(self) -> Dict[str, InitStatus]:
