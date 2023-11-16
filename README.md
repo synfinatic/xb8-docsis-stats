@@ -66,3 +66,19 @@ situation.
 
 That said, if you have a working connection, by the time the modem has made the
 webUI available for polling, all of these stats should be marked `Completed`.
+
+## Example Graphs
+
+Here are some real world graphs.
+
+![example1](https://github.com/synfinatic/xb8-docsis-stats/assets/1075352/c8012ea9-2317-4383-a42f-34a6238b7077)
+
+![example2](https://github.com/synfinatic/xb8-docsis-stats/assets/1075352/ad256a47-4d3e-4fb6-9dd5-497c01c9906d)
+
+Note, the graphs with "No data" are not bugs, but rather indications that there
+are no matching "uncorrectable" errors.  The gap in the data is when I power
+cycled my modem. :)
+
+As you can see from the above, my modem looks pretty good, except I have two
+channels which have a ~50% correctable error rate.  All the other channels are
+less than 0.05% and are not reported.
