@@ -12,9 +12,10 @@ log = logging.getLogger('root')
 
 class InitStatus(enum.Enum):
     # states should be in order and correlate to the `Value Mappings`
-    # in Grafana
+    # in Grafana.  Per my contact at Comcast, there are only 3 possible values:
     NotStarted = 1  # enum.auto() # first
-    Complete = 10  #enum.auto() # last
+    InProgresss = 2
+    Complete = 3  #enum.auto() # last
 
 
 @dataclass_json
