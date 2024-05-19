@@ -211,15 +211,18 @@ class Tables:
 
     def add(self, kind: str, cidx: int, ridx: int, val: str):
         """Add a <td> to our channel"""
-        match kind.lower():
-            case 'downstream':
-                self.Downstream[cidx].set(ridx, val)
-            case 'upstream':
-                self.Upstream[cidx].set(ridx, val)
-            case 'error':
-                self.Error[cidx].set(ridx, val)
-            case _:
-                raise ValueError(f'Invalid module type = {kind}')
+        try:
+            match kind.lower():
+                case 'downstream':
+                    self.Downstream[cidx].set(ridx, val)
+                case 'upstream':
+                    self.Upstream[cidx].set(ridx, val)
+                case 'error':
+                    self.Error[cidx].set(ridx, val)
+                case _:
+                    raise ValueError(f'Invalid module type = {kind}')
+        except IndexError:
+            log.error(f'Invalid channel index {cidx} for {kind}: set({ridx}, {val})')
 
     def map_channels(self):
         """Map the Error table to the Downstream table"""
