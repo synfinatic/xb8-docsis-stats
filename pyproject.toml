@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.11"
 beautifulsoup4 = "^4.12.2"
 graphyte = "^1.7.1"
-requests = "^2.31.0"
+requests = "^2.32.2"
 dataclasses-json = "^0.6.2"
 
 
