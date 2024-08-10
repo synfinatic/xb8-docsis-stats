@@ -54,7 +54,12 @@ class Channel:
             field = None
             while len(objs):
                 field = objs.pop(0)
-                val = getattr(val, field)
+                try:
+                    val = getattr(val, field)
+                except AttributeError:
+                    # sometimes the modem doesn't report all fields because of a bug I guess?
+                    log.error("Invalid metric '%s' field: %s", metric,  field)
+                    continue
 
             metrics.append(
                 Metric(
