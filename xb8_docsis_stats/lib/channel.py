@@ -58,8 +58,8 @@ class Channel:
                     val = getattr(val, field)
                 except AttributeError:
                     # sometimes the modem doesn't report all fields because of a bug I guess?
-                    log.error("Invalid metric '%s' field: %s", metric,  field)
-                    continue
+                    log.error("Invalid metric '%s' field: %s, value: %s", metric,  field, val)
+                    break
 
             metrics.append(
                 Metric(

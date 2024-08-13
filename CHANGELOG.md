@@ -1,5 +1,9 @@
 # Changelog
 
+[v0.3.4] - 2024-08-13
+
+ * Fix crash introduced in v0.3.3
+
 [v0.3.3] - 2024-08-10
 
  * Fix AttributeError crash in channel.py
