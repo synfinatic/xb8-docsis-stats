@@ -59,17 +59,18 @@ class Channel:
                 except AttributeError:
                     # sometimes the modem doesn't report all fields because of a bug I guess?
                     log.error("Invalid metric '%s' field: %s, value: %s", metric,  field, val)
-                    break
+                    continue
 
-            metrics.append(
-                Metric(
-                    Name=f'{self.name}.{field}',
-                    Value=val,
-                    Tags={
-                        'ChannelId': f'{self.ChannelId}',
-                    }
+            if val is not None:
+                metrics.append(
+                    Metric(
+                        Name=f'{self.name}.{field}',
+                        Value=val,
+                        Tags={
+                            'ChannelId': f'{self.ChannelId}',
+                        }
+                    )
                 )
-            )
         return metrics
 
     @property
