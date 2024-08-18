@@ -1,5 +1,9 @@
 # Changelog
 
+[v0.3.5] - 2024-08-18
+
+ * Improve crash fix
+
 [v0.3.4] - 2024-08-13
 
  * Fix crash introduced in v0.3.3
