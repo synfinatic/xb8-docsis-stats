@@ -233,8 +233,12 @@ class Tables:
     def map_channels(self):
         """Map the Error table to the Downstream table"""
         for error in self.Error:
-            chan = self.find_channel(error.ChannelId)
-            chan.Error = error
+            try:
+                chan = self.find_channel(error.ChannelId)
+                chan.Error = error
+            except ValueError as e:
+                log.error(f'unable to map error table to downstream channel: {e}')
+                continue
         self.Error = None
 
     def find_channel(self, chan: int) -> Union[Downstream, Upstream]:

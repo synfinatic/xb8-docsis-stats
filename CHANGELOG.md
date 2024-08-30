@@ -1,5 +1,9 @@
 # Changelog
 
+[v0.3.6] - 2024-08-30
+
+ * Fix crash with missing error channel
+
 [v0.3.5] - 2024-08-18
 
  * Improve crash fix
