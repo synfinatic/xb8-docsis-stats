@@ -1,5 +1,10 @@
 # Changelog
 
+[v0.3.6] - 2024-10-23
+
+ * Fix crash with missing error channel
+ * Fix crash with invalid Downstream/Upstream value
+
 [v0.3.5] - 2024-08-18
 
  * Improve crash fix

@@ -126,8 +126,11 @@ class Downstream(Channel):
             case 'LockStatus' | 'Modulation' | 'Frequency':
                 setattr(self, Downstream._fields[row_idx], val)
             case 'SNR' | 'PowerLevel':
-                x, _ = val.split(" ", 1)
-                setattr(self, Downstream._fields[row_idx], float(x))
+                try:
+                    x, _ = val.split(" ", 1)
+                    setattr(self, Downstream._fields[row_idx], float(x))
+                except ValueError:
+                    log.error(f'Invalid Downstream field {row_idx} = {val}')
             case _:
                 raise ValueError(f'Unknown Downstream field {row_idx} = {val}')
 
@@ -157,8 +160,11 @@ class Upstream(Channel):
             case 'ChannelType':
                 setattr(self, Upstream._fields[row_idx], val)
             case 'PowerLevel':
-                x, _ = val.split(" ", 1)
-                setattr(self, Upstream._fields[row_idx], float(x))
+                try:
+                    x, _ = val.split(" ", 1)
+                    setattr(self, Upstream._fields[row_idx], float(x))
+                except ValueError:
+                    log.error(f'Invalid Upstream field {row_idx} = {val}')
             case _:
                 raise ValueError(f'Unknown Upstream field {row_idx} = {val}')
 
@@ -233,8 +239,12 @@ class Tables:
     def map_channels(self):
         """Map the Error table to the Downstream table"""
         for error in self.Error:
-            chan = self.find_channel(error.ChannelId)
-            chan.Error = error
+            try:
+                chan = self.find_channel(error.ChannelId)
+                chan.Error = error
+            except ValueError as e:
+                log.error(f'unable to map error table to downstream channel: {e}')
+                continue
         self.Error = None
 
     def find_channel(self, chan: int) -> Union[Downstream, Upstream]:
