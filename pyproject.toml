@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "xb8-docsis-stats"
-version = "0.3.3"
+version = "0.3.6"
 description = "Comcast XB7/XB8 DOCSIS stats scraper"
 authors = ["Aaron Turner <synfinatic@gmail.com>"]
 readme = "README.md"
