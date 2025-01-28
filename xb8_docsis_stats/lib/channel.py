@@ -156,7 +156,10 @@ class Upstream(Channel):
             return
         match Upstream._fields[row_idx]:
             case 'SymbolRate':
-                setattr(self, Upstream._fields[row_idx], int(val))
+                try:
+                    setattr(self, Upstream._fields[row_idx], int(val))
+                except ValueError:
+                    log.error(f'Invalid Upstream field {row_idx} = {val}')
             case 'ChannelType':
                 setattr(self, Upstream._fields[row_idx], val)
             case 'PowerLevel':
