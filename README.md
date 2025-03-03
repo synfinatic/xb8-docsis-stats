@@ -1,3 +1,8 @@
+# Please Read!!!
+
+I am no longer a Comcast/Xfinity customer and hence will not be continuing
+to develop or supporting this project.
+
 # Comcast XB7/XB8 DOCSIS Stats for Graphite
 
 This is a webscraper for collecting the DOCSIS modem stats for the
